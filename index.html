@@ -3,16 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title</title>
-    <!-- You can link to external CSS files here if needed -->
+    <title>Country Information</title>
+    <link rel="stylesheet" href="style.css">
+   
+
 </head>
 <body>
-  <form id="search-form">
-    <input type="text" id="country-input" placeholder="Enter a country name">
-    <button type="submit">Search</button>
-  </form>
-    
-    <!-- Reference the external JavaScript file -->
-    <script src="index.js"></script>
+      <div class="search-container">
+        <form id="search-form">
+            <input type="text" id="country-input" placeholder="Search for a country...">
+            <button type="submit">Search</button>
+        </form>
+        </form>
+    </div>
+
+    <div class="card-container">
+        <div class="card">
+          <img src="https://flagcdn.com/w320/it.png" alt="Country 1">
+            <h2>Country 1</h2>
+            <p>Population: XYZ</p>
+            <p>Capital: ABC</p>
+             <p>Languages</p>
+            <p>Currency</p>
+            <p>Continent ABC</p>
+        </div>
+  
+        <!-- Repeat similar card structure for other countries -->
+    </div>
+      <script src="index.js"></script>
 </body>
 </html>
