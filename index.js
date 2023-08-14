@@ -1,5 +1,5 @@
 const countriesURL = "https://restcountries.com/v3.1/all?name";
-
+let selectedCountry;
 function getCountries(url) {
   // takes URL as argument. uses fetch to get the countries + a variety of .then and catch. error thrown if response not ok
   return fetch(url)
@@ -22,8 +22,10 @@ getCountries(countriesURL).then((countries) => {
     // adds event listener to the search form. when someone submits a country, the below happens
     event.preventDefault();
     const countryName = document.getElementById("country-input").value; //retrieves the value entered in the input field and stores it in the countryName variable
-    searchCountry(countryName, countries); // invokes searchCountry function, and passes the countryname and countries array as arguments
+    selectedCountry = searchCountry(countryName, countries); // invokes searchCountry function, and passes the countryname and countries array as arguments
+    newCountryCard(selectedCountry);
   });
+
 
   function searchCountry(name, countries) {
     // takes in country name that we inputting and returns the data
@@ -34,10 +36,41 @@ getCountries(countriesURL).then((countries) => {
     );
 
     if (country) {
-      // Display the country information on your webpage or perform other actions
+      selectedCountry = country
       console.log(country);
+      const cardContainer = document.querySelector('.card-container');
+      const newCard = newCountryCard(selectedCountry);
+      cardContainer.appendChild(newCard);
+      // Display the country information on your webpage or perform other actions
+     // console.log(country);
     } else {
       console.log("Country not found"); //if no country is found it returns country not found
     }
   }
 });
+
+function newCountryCard(selectedCountry) {
+  const cardContainer = document.createElement("div");
+  cardContainer.classList.add("card");
+  const img = document.createElement("img");
+  img.src = selectedCountry.flags.png;
+  const h2 = document.createElement("h2");
+  h2.textContent = selectedCountry.name.common;
+  const population = document.createElement("p");
+  population.textContent = "Population:" + selectedCountry.population;
+
+  cardContainer.appendChild(img);
+  cardContainer.appendChild(h2);
+  cardContainer.appendChild(population);
+
+  return cardContainer;
+}
+
+//  
+// }
+//countries.population
+//countries.name.common
+//countries.capital [0]
+//countries.currencies
+//countries.continents
+
