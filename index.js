@@ -1,6 +1,7 @@
-const makeupURL = "http://makeup-api.herokuapp.com/api/v1/products.json";
+const countriesURL = "https://restcountries.com/v3.1/all?name";
 
-function getMakeup(url) {
+function getCountries(url) {
+  // takes URL as argument. uses fetch to get the countries + a variety of .then and catch. error thrown if response not ok
   return fetch(url)
     .then((response) => {
       if (!response.ok) {
@@ -13,10 +14,30 @@ function getMakeup(url) {
     });
 }
 
-const makeupResponse = getMakeup(makeupURL);
+getCountries(countriesURL).then((countries) => {
+  //invokes get countries and sets up subsequent steps with data (adding submit form)
 
-makeupResponse.then((makeup) => {
-  for (let i = 0; i < makeup.length; i++) {
-    console.log(makeup[i]);
+  const searchForm = document.getElementById("search-form"); // finds and stores a referece to the html form element with id search form
+  searchForm.addEventListener("submit", function (event) {
+    // adds event listener to the search form. when someone submits a country, the below happens
+    event.preventDefault();
+    const countryName = document.getElementById("country-input").value; //retrieves the value entered in the input field and stores it in the countryName variable
+    searchCountry(countryName, countries); // invokes searchCountry function, and passes the countryname and countries array as arguments
+  });
+
+  function searchCountry(name, countries) {
+    // takes in country name that we inputting and returns the data
+    const country = countries.find(
+      // uses array find method to search for a country whose common name matches the entered name
+      (countryData) =>
+        countryData.name.common.toLowerCase() === name.toLowerCase() // case insensitive
+    );
+
+    if (country) {
+      // Display the country information on your webpage or perform other actions
+      console.log(country);
+    } else {
+      console.log("Country not found"); //if no country is found it returns country not found
+    }
   }
 });
