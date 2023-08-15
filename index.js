@@ -55,6 +55,17 @@ getCountries(countriesURL).then((countries) => {
 
 function newCountryCard(selectedCountry) {
 
+  const saveButton = document.createElement("button");
+  saveButton.className = "save";
+  saveButton.textContent = "Save";
+  saveButton.addEventListener('click', () => {
+    saveCountry(selectedCountry);
+    const saveBar = document.querySelector("#saveBar")
+    saveBar.textContent = ""
+    saveButton.textContent = "Country Saved!"
+    
+  });
+
   
   const toggleButton = document.createElement("button"); // toggle to display coat of arms/size/could be anything**
   toggleButton.className = "toggle";
@@ -63,15 +74,12 @@ function newCountryCard(selectedCountry) {
   const hiddenContainer = document.createElement("div");
   hiddenContainer.style.display = "none";
 
-  const coatOfArms = document.createElement("p");
-  coatOfArms.innerHTML = `<br>A design often used to signify a family or institution. They can describe the identity of a country with different shapes, colors, and animals.`
-
   const pic = document.createElement("img")
   pic.className = "coat"
   pic.src = selectedCountry.coatOfArms.png;
 
   hiddenContainer.appendChild(pic);
-  hiddenContainer.appendChild(coatOfArms);
+  
 
   let visible = false;
   toggleButton.addEventListener('mouseover', (e) => {
@@ -81,9 +89,6 @@ function newCountryCard(selectedCountry) {
   })
   
  
-
-
-
   const deleteButton = document.createElement("button") //creates delete button to get rid of card container
   deleteButton.className = "delete"
   deleteButton.textContent = "Delete"
@@ -134,24 +139,82 @@ function newCountryCard(selectedCountry) {
   cardContainer.appendChild(size);
   cardContainer.appendChild(deleteButton);
   cardContainer.appendChild(toggleButton);
+  cardContainer.appendChild(saveButton);
   cardContainer.appendChild(hiddenContainer);
   
-  
-
-
   return cardContainer;
-  
-
   
 }
 
+function saveCountry(selectedCountry) {
+  //accessing local storage and naming the container that it was stored in "savedCountries"
+  let savedCountries = JSON.parse(localStorage.getItem("savedCountries")); 
+  //you're pushing the selectedCountry into the array, javaScript infers that it's an array based on the operations performed on it
+  savedCountries.push(selectedCountry);
+  //you're placing the selectedCountry in local storage in a format that the local storage can read i.e. JSON.stringify;
+  localStorage.setItem("savedCountries", JSON.stringify(savedCountries));
+  console.log(savedCountries);
+
+}
+//function to create the buttons to click out of and open the countries in the saveBar
+document.addEventListener('DOMContentLoaded', (e) => {
+  const saveBar = document.querySelector("#saveBar"); //accessing saveBar element in html
+  const savedCountries = JSON.parse(localStorage.getItem("savedCountries")); //accessing local storage
+
+  //if else statement saying if the local storage array "savedCountries" has data inside of it(not empty), then it will perform the following:
+  if (savedCountries && savedCountries.length > 0) {
+//looping through the savedCountries array that creates div for the name, open button, and delete button.
+    savedCountries.forEach((selectedCountry, index) => {
+        
+      const savedCountryDiv = document.createElement("div");
+      savedCountryDiv.className = "savedCountryDiv"
+
+      const countryName = document.createElement("span");
+      countryName.textContent = selectedCountry.name.common;
+
+      const openButton = document.createElement("button");
+      openButton.textContent = "Open";
+      
+      openButton.addEventListener('click', () => {
+        const cardContainer = document.querySelector(".card-container");
+        const savedCard = newCountryCard(selectedCountry);
+        cardContainer.appendChild(savedCard);
+        console.log(selectedCountry)
+        
+        
+      });
 
 
-//  
-// }
-//countries.population
-//countries.name.common
-//countries.capital [0]
-//countries.currencies
-//countries.continents
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "X";
+      deleteButton.addEventListener('click', (e) => {
+
+       //deletes item of the array based on the index
+        deleteSavedItem(index);
+        savedCountryDiv.remove(); //removes the entire div from the saveBar
+        
+      });
+
+      savedCountryDiv.appendChild(countryName);
+      savedCountryDiv.appendChild(openButton);
+      savedCountryDiv.appendChild(deleteButton);
+      saveBar.appendChild(savedCountryDiv);
+
+      
+    });
+  } else {
+    saveBar.textContent = "No Saved Countries"
+  }
+});
+
+function deleteSavedItem(index) {
+  //accesses the saved countries array from local storage
+  const savedCountries = JSON.parse(localStorage.getItem("savedCountries"));
+  //uses the splice method to remove the item at the index it's in
+  savedCountries.splice(index);
+  //updates the modified savedCountries array in local storage
+  localStorage.setItem("savedCountries", JSON.stringify(savedCountries));
+}
+
+
 
