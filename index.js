@@ -22,8 +22,9 @@ getCountries(countriesURL).then((countries) => {
     // adds event listener to the search form. when someone submits a country, the below happens
     event.preventDefault();
     const countryName = document.getElementById("country-input").value; //retrieves the value entered in the input field and stores it in the countryName variable
-    selectedCountry = searchCountry(countryName, countries); // invokes searchCountry function, and passes the countryname and countries array as arguments
-    newCountryCard(selectedCountry);
+    selectedCountry = searchCountry(countryName, countries);
+    searchForm.reset(); // invokes searchCountry function, and passes the countryname and countries array as arguments
+    
   });
 
 
@@ -49,7 +50,18 @@ getCountries(countriesURL).then((countries) => {
   }
 });
 
+
+
 function newCountryCard(selectedCountry) {
+
+
+  const deleteButton = document.createElement("button")
+  deleteButton.className = "delete"
+  deleteButton.textContent = "Delete"
+  deleteButton.addEventListener('click', (e) => {
+    cardContainer.remove();
+   
+  })
   const cardContainer = document.createElement("div");
   cardContainer.classList.add("card");
   const img = document.createElement("img");
@@ -57,13 +69,35 @@ function newCountryCard(selectedCountry) {
   const h2 = document.createElement("h2");
   h2.textContent = selectedCountry.name.common;
   const population = document.createElement("p");
-  population.textContent = "Population:" + selectedCountry.population;
+  population.textContent = `Population: ${selectedCountry.population}`
+  const capital = document.createElement("p");
+  capital.textContent = `Capital: ${selectedCountry.capital}`;
+  const languages = document.createElement("p");
+  languages.textContent = `Languages: ${Object.values(selectedCountry.languages)[0]}`
+  const currency = document.createElement("span")
+  const firstCurrencyKey = Object.keys(selectedCountry.currencies)[0]
+  const firstCurrency = selectedCountry.currencies[firstCurrencyKey]
+  currency.innerHTML = `Currency: ${firstCurrency.name}<br><br>Symbol: ${firstCurrency.symbol}`
+  const subRegion = document.createElement("p");
+  subRegion.textContent = `Region: ${selectedCountry.subregion}`;
+  
 
   cardContainer.appendChild(img);
   cardContainer.appendChild(h2);
   cardContainer.appendChild(population);
+  cardContainer.appendChild(capital);
+  cardContainer.appendChild(languages);
+  cardContainer.appendChild(currency);
+  cardContainer.appendChild(subRegion);
+  cardContainer.appendChild(deleteButton);
+ 
+ 
+
 
   return cardContainer;
+  
+
+  
 }
 
 //  
