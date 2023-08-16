@@ -46,7 +46,8 @@ getCountries(countriesURL).then((countries) => {
       // Display the country information on your webpage or perform other actions
      // console.log(country);
     } else {
-      console.log("Country not found"); //if no country is found it returns country not found
+      window.alert("That's not a country name silly. Try again!");
+     // console.log("Country not found"); //if no country is found it returns country not found
     }
   }
 });
