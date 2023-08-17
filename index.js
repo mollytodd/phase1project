@@ -62,7 +62,7 @@ function newCountryCard(selectedCountry) {
     saveCountry(selectedCountry);
     const saveBar = document.querySelector("#saveBar")
     saveBar.className = "saveBar"
-    saveBar.textContent = ""
+    saveBar.textContent = "Saved Countries here"
     saveButton.textContent = "Country Saved!"
     const savedCountries = JSON.parse(localStorage.getItem("savedCountries"))
     displaySavedCountries(savedCountries);
@@ -224,5 +224,8 @@ function displaySavedCountries(savedCountries) {
 
 document.addEventListener('DOMContentLoaded', (e) => {
   const savedCountries = JSON.parse(localStorage.getItem("savedCountries"));
+   const saveBar = document.querySelector("#saveBar");
+  saveBar.className = "saveBar";
+   saveBar.textContent = "Saved Countries here";
   displaySavedCountries(savedCountries);
 })
